@@ -1,0 +1,418 @@
+<div style="margin-left: 10%; padding-left: 40px; padding-top: 2%">
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 30%;
+    "
+  >
+    <h2 style="color: white">Doadores</h2>
+    <fa-icon
+      [icon]="faUserPlus"
+      (click)="abrirFormCadastro()"
+      style="color: white; font-size: 20px; cursor: pointer"
+    ></fa-icon>
+  </div>
+  <div *ngIf="doadores && doadores.length > 0; else semDoadores">
+    <ul class="lista-doadores">
+      <li class="cabecalho">
+        <span class="col-id">ID</span>
+        <span class="col-nome">Nome</span>
+        <span class="col-email">Email</span>
+        <span class="col-telefone">Telefone</span>
+        <span class="col-cpf">CPF</span>
+        <span class="col-acoes">Ações</span>
+      </li>
+
+      <li *ngFor="let doador of doadores" class="item">
+        <span class="col-id">{{ doador.id }}</span>
+        <span class="col-nome">{{ doador.nome }}</span>
+        <span class="col-email">{{ doador.email }}</span>
+        <span class="col-telefone">{{ doador.telefone }}</span>
+        <span class="col-cpf">{{ doador.cpf }}</span>
+        <span class="col-acoes">
+          <button title="Vizualizar" (click)="abrirModal(doador)">
+            <fa-icon [icon]="faEye"></fa-icon>
+          </button>
+          <button title="Editar" (click)="abrirFormularioEdicao(doador)">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </button>
+          <button title="Excluir" (click)="excluirDoador(doador.id)">
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #semDoadores>
+    <div
+      style="
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      "
+    >
+      <fa-icon
+        [icon]="faUserSlash"
+        style="font-size: 50px; color: white"
+      ></fa-icon>
+
+      <p
+        style="
+          color: white;
+          margin-top: 20px;
+          font-weight: bold;
+          font-size: 20px;
+        "
+      >
+        Nenhum doador encontrado.
+      </p>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Modal Cadastro -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarFormCadastro"
+  (click)="fecharFormCadastro()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      color: #333;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #222; text-align: center">
+      Cadastrar Novo Doador
+    </h3>
+
+    <form
+      (ngSubmit)="cadastrarDoador()"
+      style="display: flex; flex-direction: column; gap: 12px"
+    >
+      <input
+        type="text"
+        [(ngModel)]="novoDoador.nome"
+        name="nome"
+        placeholder="Nome"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="email"
+        [(ngModel)]="novoDoador.email"
+        name="email"
+        placeholder="Email"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="novoDoador.telefone"
+        name="telefone"
+        placeholder="Telefone"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="novoDoador.cpf"
+        name="cpf"
+        placeholder="CPF"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="password"
+        [(ngModel)]="novoDoador.senha"
+        name="senha"
+        placeholder="Senha"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 15px;
+        "
+      >
+        <button
+          type="button"
+          (click)="fecharFormCadastro()"
+          style="
+            padding: 10px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#b3b3b3'"
+          onmouseout="this.style.background='#ccc'"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          style="
+            padding: 10px 16px;
+            background-color: #32a2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#288a90'"
+          onmouseout="this.style.background='#32a2aa'"
+        >
+          Cadastrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Vizualizar -->
+<div
+  class="modal-overlay"
+  *ngIf="doadorSelecionado"
+  (click)="fecharModal()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 320px;
+      color: black;
+    "
+  >
+    <h3>Detalhes do Doador</h3>
+    <p><strong>ID:</strong> {{ doadorSelecionado.id }}</p>
+    <p><strong>Nome:</strong> {{ doadorSelecionado.nome }}</p>
+    <p><strong>Email:</strong> {{ doadorSelecionado.email }}</p>
+    <p><strong>Telefone:</strong> {{ doadorSelecionado.telefone }}</p>
+    <p><strong>CPF:</strong> {{ doadorSelecionado.cpf }}</p>
+
+    <button
+      type="button"
+      (click)="fecharModal()"
+      style="
+        padding: 10px 16px;
+        background-color: #ccc;
+        color: #333;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      "
+    >
+      Cancelar
+    </button>
+  </div>
+</div>
+
+<!-- Modal Edição -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarFormEdicao"
+  (click)="fecharFormEdicao()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      color: #333;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #222; text-align: center">
+      Editar Doador
+    </h3>
+
+    <form
+      (ngSubmit)="salvarEdicao()"
+      style="display: flex; flex-direction: column; gap: 12px"
+    >
+      <input
+        type="text"
+        [(ngModel)]="doadorEditando.nome"
+        name="editNome"
+        placeholder="Nome"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="email"
+        [(ngModel)]="doadorEditando.email"
+        name="editEmail"
+        placeholder="Email"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="doadorEditando.telefone"
+        name="editTelefone"
+        placeholder="Telefone"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="doadorEditando.cpf"
+        name="editCpf"
+        placeholder="CPF"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 15px;
+        "
+      >
+        <button
+          type="button"
+          (click)="fecharFormEdicao()"
+          style="
+            padding: 10px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          style="
+            padding: 10px 16px;
+            background-color: #32a2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+        >
+          Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,562 @@
+<div class="container">
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 30%;
+    "
+  >
+    <h2 style="color: white">campanhas</h2>
+    <fa-icon
+      [icon]="faPlusSquare"
+      style="color: white; font-size: 20px; cursor: pointer"
+      (click)="abrirFormCadastro()"
+    ></fa-icon>
+  </div>
+  <div *ngIf="campanhas && campanhas.length > 0; else semCampanhas">
+    <ul class="lista-campanhas">
+      <li class="cabecalho">
+        <span class="col-id">ID</span>
+        <span class="col-nome">Nome</span>
+        <span class="col-descricao">Descrição</span>
+        <span class="col-inicio">Início</span>
+        <span class="col-fim">Fim</span>
+        <span class="col-meta">Meta</span>
+        <span class="col-acoes">Ações</span>
+      </li>
+      <li *ngFor="let campanha of campanhas" class="item">
+        <span class="col-id">{{ campanha.id }}</span>
+        <span class="col-nome">{{ campanha.nome }}</span>
+        <span class="col-descricao">
+          {{
+            campanha.descricao.length > 15
+              ? (campanha.descricao | slice : 0 : 15) + "..."
+              : campanha.descricao
+          }}
+        </span>
+        <span class="col-inicio">{{
+          formatarDataVisual(campanha.dtInicio)
+        }}</span>
+        <span class="col-fim">{{ formatarDataVisual(campanha.dtFim) }}</span>
+        <span class="col-meta">{{
+          campanha.metaArrecadacao
+            | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
+        }}</span>
+        <span class="col-acoes">
+          <button title="Vizualizar" (click)="abrirModalCampanha(campanha)">
+            <fa-icon [icon]="faHandHoldingDollar"></fa-icon>
+          </button>
+          <button title="Vizualizar" (click)="abrirModalCampanha(campanha)">
+            <fa-icon [icon]="faEye"></fa-icon>
+          </button>
+          <button title="Editar" (click)="abrirFormEdicao(campanha)">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </button>
+          <button title="Excluir" (click)="excluirCampanha(campanha.id)">
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <ng-template #semCampanhas>
+    <div
+      style="
+        height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      "
+    >
+      <fa-icon
+        [icon]="faBullhorn"
+        style="font-size: 50px; color: white"
+      ></fa-icon>
+
+      <p
+        style="
+          color: white;
+          margin-top: 20px;
+          font-weight: bold;
+          font-size: 20px;
+        "
+      >
+        Nenhuma campanha encontrada.
+      </p>
+    </div>
+  </ng-template>
+</div>
+<!-- Modal Cadastro -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarFormCadastro"
+  (click)="fecharFormCadastro()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      color: #333;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #222; text-align: center">
+      Cadastrar Nova Campanha
+    </h3>
+
+    <form
+      (ngSubmit)="cadastrarCampanha()"
+      style="display: flex; flex-direction: column"
+    >
+      <p>Nome</p>
+      <input
+        type="text"
+        [(ngModel)]="novaCampanha.nome"
+        name="nome"
+        placeholder="Nome"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <p>Descricao</p>
+      <input
+        type="text"
+        [(ngModel)]="novaCampanha.descricao"
+        name="descricao"
+        placeholder="Descrição"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <p>Data de Início</p>
+      <input
+        type="date"
+        [(ngModel)]="novaCampanha.dtInicio"
+        name="dtInicio"
+        placeholder="Data de Início"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <p>Data de Fim</p>
+      <input
+        type="date"
+        [(ngModel)]="novaCampanha.dtFim"
+        name="dtFim"
+        placeholder="Data de Fim"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <p>Valor Estimado</p>
+      <input
+        type="number"
+        [(ngModel)]="novaCampanha.metaArrecadacao"
+        name="metaArrecadacao"
+        placeholder="Meta de Arrecadação"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 15px;
+        "
+      >
+        <button
+          type="button"
+          (click)="fecharFormCadastro()"
+          style="
+            padding: 10px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#b3b3b3'"
+          onmouseout="this.style.background='#ccc'"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          style="
+            padding: 10px 16px;
+            background-color: #32a2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#288a90'"
+          onmouseout="this.style.background='#32a2aa'"
+        >
+          Cadastrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Vizualizar Campanha -->
+<div
+  class="modal-overlay"
+  *ngIf="campanhaSelecionada"
+  (click)="fecharModalCampanha()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 400px;
+      color: black;
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 16px; text-align: center; color: #222">
+      Detalhes da Campanha
+    </h3>
+
+    <p><strong>ID:</strong> {{ campanhaSelecionada.id }}</p>
+    <p><strong>Nome:</strong> {{ campanhaSelecionada.nome }}</p>
+    <p><strong>Descrição:</strong> {{ campanhaSelecionada.descricao }}</p>
+    <p>
+      <strong>Início:</strong>
+      {{ formatarDataVisual(campanhaSelecionada.dtInicio) }}
+    </p>
+    <p>
+      <strong>Fim:</strong> {{ formatarDataVisual(campanhaSelecionada.dtFim) }}
+    </p>
+    <p>
+      <strong>Meta de Arrecadação:</strong>
+      {{
+        campanhaSelecionada.metaArrecadacao
+          | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
+      }}
+    </p>
+
+    <div
+      style="
+        margin-top: 20px;
+        text-align: right;
+        display: flex;
+        justify-content: space-between;
+      "
+    >
+      <button
+        type="button"
+        (click)="abrirModalDoacoes(campanhaSelecionada.id)"
+        style="
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+        "
+      >
+        Ver Doações
+      </button>
+      <button
+        type="button"
+        (click)="fecharModalCampanha()"
+        style="
+          padding: 10px 16px;
+          background-color: #ccc;
+          color: #333;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+        "
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edição Campanha -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarFormEdicao"
+  (click)="fecharFormEdicao()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      color: #333;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #222; text-align: center">
+      Editar Campanha
+    </h3>
+
+    <form
+      (ngSubmit)="salvarEdicao()"
+      style="display: flex; flex-direction: column; gap: 12px"
+    >
+      <input
+        type="text"
+        [(ngModel)]="campanhaEditando.nome"
+        name="editNome"
+        placeholder="Nome da Campanha"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <textarea
+        [(ngModel)]="campanhaEditando.descricao"
+        name="editDescricao"
+        placeholder="Descrição"
+        rows="3"
+        maxlength="300"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+          resize: vertical;
+        "
+      ></textarea>
+      <input
+        type="date"
+        [(ngModel)]="campanhaEditando.dtInicio"
+        name="editDtInicio"
+        placeholder="Data de Início"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="date"
+        [(ngModel)]="campanhaEditando.dtFim"
+        name="editDtFim"
+        placeholder="Data de Fim"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="number"
+        [(ngModel)]="campanhaEditando.metaArrecadacao"
+        name="editMeta"
+        placeholder="Meta de Arrecadação (R$)"
+        min="0"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 15px;
+        "
+      >
+        <button
+          type="button"
+          (click)="fecharFormEdicao()"
+          style="
+            padding: 10px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          style="
+            padding: 10px 16px;
+            background-color: #32a2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+        >
+          Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de Doações da Campanha -->
+<div
+  *ngIf="mostrarModalDoacoes"
+  class="modal-overlay"
+  (click)="fecharModalDoacoes()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    "
+  >
+    <h3 style="text-align: center; margin-bottom: 16px">Doações da Campanha</h3>
+
+    <ul style="list-style: none; padding: 0">
+      <li *ngFor="let d of doacoesDaCampanha" style="margin-bottom: 12px">
+        <p><strong>ID:</strong> {{ d.id }}</p>
+        <p><strong>Doador:</strong> {{ d.idDoador }}</p>
+        <p>
+          <strong>Valor:</strong>
+          {{ d.valorDoado | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+        </p>
+        <p>
+          <strong>Vencimento do Cartão:</strong>
+          {{ formatarDataVisual(d.dtValidadeCartao) }}
+        </p>
+        <hr />
+      </li>
+      <li *ngIf="doacoesDaCampanha.length === 0" style="text-align: center">
+        Nenhuma doação encontrada.
+      </li>
+    </ul>
+
+    <div style="text-align: center; margin-top: 20px">
+      <button
+        type="button"
+        (click)="fecharModalDoacoes()"
+        style="
+          padding: 10px 20px;
+          background-color: #ccc;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+        "
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,262 @@
+<header
+  style="
+    background-color: #102a18;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 50px;
+  "
+>
+  <div style="display: flex; align-items: center">
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        cursor: pointer;
+      "
+    >
+      <img src="assets/logo.png" alt="Logo" style="width: 45px" />
+      <h1 style="font-size: 20px; margin-left: 10px; color: white">TechBoys</h1>
+    </div>
+    <h1 style="text-align: center; width: 100%; font-size: 20px; color: white">
+      Campanhas
+    </h1>
+  </div>
+</header>
+
+<main style="margin-top: 80px; padding: 20px">
+  <div *ngIf="campanhas.length === 0" style="text-align: center; color: #555">
+    <p>Não existem campanhas ativas no momento.</p>
+  </div>
+
+  <div *ngIf="campanhas.length > 0" class="campanhas-grid">
+    <div *ngFor="let campanha of campanhas" class="card">
+      <h3>{{ campanha.nome }}</h3>
+      <p class="descricao">{{ campanha.descricao }}</p>
+      <p>
+        <strong>Meta:</strong>
+        {{
+          campanha.metaArrecadacao
+            | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
+        }}
+      </p>
+      <p>
+        <strong>Período:</strong>
+        {{ formatarDataVisual(campanha.dtInicio) }} até
+        {{ formatarDataVisual(campanha.dtFim) }}
+      </p>
+      <button (click)="verDetalhes(campanha.id)">Ver Detalhes</button>
+    </div>
+  </div>
+</main>
+
+<div class="paginacao">
+  <button [disabled]="pagina === 1" (click)="paginaAnterior()">Anterior</button>
+  <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+  <button [disabled]="pagina === totalPaginas" (click)="proximaPagina()">
+    Próxima
+  </button>
+</div>
+
+<!-- Modal de Detalhes -->
+<div
+  *ngIf="detalhesCampanha"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "
+>
+  <div
+    style="
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    "
+  >
+    <h2 style="margin-bottom: 10px">{{ detalhesCampanha.nome }}</h2>
+    <p style="color: #333; margin-bottom: 10px">
+      {{ detalhesCampanha.descricao }}
+    </p>
+    <p>
+      <strong>Meta:</strong>
+      {{
+        detalhesCampanha.metaArrecadacao
+          | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
+      }}
+    </p>
+    <p>
+      <strong>Período:</strong>
+      {{ formatarDataVisual(detalhesCampanha.dtInicio) }} até
+      {{ formatarDataVisual(detalhesCampanha.dtFim) }}
+    </p>
+
+    <div
+      style="margin-top: 20px; display: flex; justify-content: space-between"
+    >
+      <!-- (click)="abrirFormularioDoacao(detalhesCampanha.id)" -->
+
+      <button
+        (click)="abrirFormularioDoacao()"
+        style="
+          background-color: #28a745;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+        "
+      >
+        Doar Agora
+      </button>
+
+      <button
+        (click)="fecharDetalhes()"
+        style="
+          background-color: #dc3545;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+        "
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Modal de Doação -->
+<div
+  *ngIf="mostrarFormularioDoacao"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 3000; /* maior que o modal de detalhes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "
+>
+  <div
+    style="
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #102a18">
+      Preencha os dados do cartão
+    </h3>
+    <input
+      placeholder="Número do Cartão"
+      [(ngModel)]="dadosDoacao.numeroCartao"
+      style="
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      "
+    />
+    <input
+      placeholder="Nome no Cartão"
+      [(ngModel)]="dadosDoacao.nomeCartao"
+      style="
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      "
+    />
+    <input
+      type="date"
+      [(ngModel)]="dadosDoacao.dtValidadeCartao"
+      style="
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      "
+    />
+
+    <input
+      placeholder="Código de Segurança"
+      type="number"
+      [(ngModel)]="dadosDoacao.codigoSegurancaCartao"
+      style="
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      "
+    />
+    <input
+      placeholder="Valor a Doar (R$)"
+      type="number"
+      [(ngModel)]="dadosDoacao.valorDoado"
+      style="
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      "
+    />
+    <div style="display: flex; justify-content: space-between">
+      <button
+        (click)="enviarDoacao(detalhesCampanha.id)"
+        style="
+          background: #007bff;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          flex: 1;
+          margin-right: 10px;
+        "
+      >
+        Confirmar Doação
+      </button>
+      <button
+        (click)="mostrarFormularioDoacao = false"
+        style="
+          background: #dc3545;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          flex: 1;
+        "
+      >
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

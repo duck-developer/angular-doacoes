@@ -1,0 +1,296 @@
+<header
+  style="
+    background-color: #102a18;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 50px;
+  "
+>
+  <div style="display: flex; align-items: center">
+    <div
+      routerLink="home"
+      style="
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        cursor: pointer;
+      "
+    >
+      <img src="assets/logo.png" alt="Logo" style="width: 45px" />
+      <h1 style="font-size: 20px; margin-left: 10px; color: white">TechBoys</h1>
+    </div>
+    <h1 style="text-align: center; width: 100%; font-size: 20px; color: white">
+      Campanhas
+    </h1>
+  </div>
+</header>
+
+<!-- Menu lateral e conteúdo -->
+<main style="display: flex; flex-direction: row; padding-top: 60px">
+  <!-- Menu -->
+  <nav
+    style="
+      background-color: #2f3d34;
+      width: 10%;
+      height: calc(100vh - 60px);
+      position: fixed;
+      top: 60px;
+      left: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    "
+  >
+    <a
+      routerLink="perfil"
+      style="
+        margin: 10px 0;
+        cursor: pointer;
+        background-color: #89bc24;
+        padding: 10px;
+        border-radius: 100%;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+      "
+    >
+      <img src="assets/perfil.png" alt="Perfil" />
+    </a>
+
+    <a
+      *ngIf="userRole === 'ADMIN'"
+      routerLink="novo-perfil"
+      style="
+        margin: 10px 0;
+        cursor: pointer;
+        background-color: #89bc24;
+        padding: 10px;
+        border-radius: 100%;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+      "
+    >
+      <img src="assets/perfil-plus.png" alt="Novo Perfil" />
+    </a>
+    <a
+      *ngIf="userRole === 'ADMIN'"
+      (click)="toggleCadastroAdmin()"
+      style="
+        margin: 10px 0;
+        cursor: pointer;
+        background-color: #89bc24;
+        padding: 10px;
+        border-radius: 100%;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+      "
+    >
+      <fa-icon
+        [icon]="faUserShield"
+        style="color: white; font-size: 15px; cursor: pointer"
+      ></fa-icon>
+    </a>
+
+    <a
+      *ngIf="userRole === 'ADMIN'"
+      routerLink="campanhas"
+      style="
+        margin: 10px 0;
+        cursor: pointer;
+        background-color: #89bc24;
+        padding: 10px;
+        border-radius: 100%;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+      "
+    >
+      <fa-icon
+        [icon]="faBullhorn"
+        style="color: white; font-size: 15px; cursor: pointer"
+      ></fa-icon>
+    </a>
+
+    <a
+      (click)="logout()"
+      style="
+        margin: 10px 0;
+        cursor: pointer;
+        background-color: #89bc24;
+        padding: 10px;
+        border-radius: 100%;
+        align-items: center;
+        justify-items: center;
+        display: flex;
+      "
+    >
+      <img src="assets/logout.png" alt="Logout" />
+    </a>
+  </nav>
+
+  <!-- Conteúdo das rotas -->
+  <section style="background-color: #3f4f44; width: 100%; height: 90vh">
+    <router-outlet></router-outlet>
+  </section>
+</main>
+<div
+  class="modal-overlay"
+  *ngIf="showCadastroAdmin"
+  (click)="toggleCadastroAdmin()"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  "
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    style="
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      width: 400px;
+      color: #333;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Segoe UI', sans-serif;
+    "
+  >
+    <h3 style="margin-bottom: 20px; color: #222; text-align: center">
+      Cadastrar Novo Administrador
+    </h3>
+
+    <form
+      (ngSubmit)="cadastrarAdmin()"
+      #formAdmin="ngForm"
+      style="display: flex; flex-direction: column; gap: 12px"
+    >
+      <input
+        type="text"
+        [(ngModel)]="formData.cpf"
+        name="cpf"
+        placeholder="CPF"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="email"
+        [(ngModel)]="formData.email"
+        name="email"
+        placeholder="Email"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="formData.nome"
+        name="nome"
+        placeholder="Nome"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="text"
+        [(ngModel)]="formData.telefone"
+        name="telefone"
+        placeholder="Telefone"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+      <input
+        type="password"
+        [(ngModel)]="formData.senha"
+        name="senha"
+        placeholder="Senha"
+        required
+        style="
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          outline: none;
+        "
+      />
+
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+          margin-top: 15px;
+        "
+      >
+        <button
+          type="button"
+          (click)="toggleCadastroAdmin()"
+          style="
+            padding: 10px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#b3b3b3'"
+          onmouseout="this.style.background='#ccc'"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="formAdmin.invalid"
+          style="
+            padding: 10px 16px;
+            background-color: #32a2aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+          "
+          onmouseover="this.style.background='#288a90'"
+          onmouseout="this.style.background='#32a2aa'"
+        >
+          Cadastrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

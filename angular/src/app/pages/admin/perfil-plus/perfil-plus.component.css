@@ -1,0 +1,79 @@
+.container {
+  margin-left: 10%;
+  padding-left: 40px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.lista-doadores {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 90%;
+}
+
+.cabecalho,
+.item {
+  display: flex;
+  padding: 10px 20px;
+  align-items: center;
+}
+
+.cabecalho {
+  font-weight: bold;
+  border-radius: 4px;
+  color: white;
+}
+
+.item {
+  background-color: #2f3d34;
+  margin-top: 10px;
+  border-radius: 4px;
+  color: white;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.col-id {
+  flex: 0 0 50px;
+}
+
+.col-nome {
+  flex: 1.5;
+}
+
+.col-email {
+  flex: 2.5;
+}
+
+.col-telefone {
+  flex: 1.2;
+}
+
+.col-cpf {
+  flex: 1.2;
+}
+
+.col-acoes {
+  flex: 0 0 100px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+.col-acoes button {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.2s;
+}
+
+.col-acoes button:hover {
+  color: #ffd700;
+}

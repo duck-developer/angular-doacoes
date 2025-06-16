@@ -1,0 +1,70 @@
+/* Inputs do formulário */
+.input-form {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1.5px solid #ccc;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input-form:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Botão salvar */
+.botao-salvar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botao-salvar:hover {
+  background-color: #218838;
+}
+
+/* Botão cancelar */
+.botao-cancelar {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.botao-cancelar:hover {
+  background-color: #5a6268;
+}
+
+/* Botão editar */
+.botao-editar {
+  margin-left: 12%;
+  margin-top: 30px;
+  padding: 10px 28px;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.botao-editar:hover {
+  background-color: #0056b3;
+}

@@ -1,0 +1,144 @@
+<div
+  style="
+    margin-left: 10%;
+    padding: 10px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+  "
+>
+  <div
+    style="
+      background-color: white;
+      display: flex;
+      width: 700px;
+      padding: 30px;
+      border-radius: 20px;
+      flex-direction: column;
+    "
+  >
+    <div style="display: flex; align-items: center">
+      <img src="assets/image-perfil.png" alt="" />
+      <div style="margin-left: 20px" *ngIf="!editando && !editandoSenha">
+        <p style="font-weight: bold; font-size: 20px">{{ usuario?.nome }}</p>
+        <p style="font-weight: bold; font-size: 20px">{{ usuario?.email }}</p>
+        <p style="font-weight: bold; font-size: 20px">
+          {{ usuario?.telefone }}
+        </p>
+        <p style="font-weight: bold; font-size: 20px">{{ usuario?.cpf }}</p>
+        <p style="font-weight: bold; font-size: 20px">{{ usuario?.tipo }}</p>
+      </div>
+
+      <!-- Formulário de edição dados -->
+      <form
+        *ngIf="editando"
+        (ngSubmit)="salvar()"
+        style="margin-left: 20px; flex-grow: 1"
+      >
+        <label>Nome</label>
+        <input
+          [(ngModel)]="usuario.nome"
+          name="nome"
+          required
+          class="input-form"
+        />
+
+        <label>Email</label>
+        <input
+          [(ngModel)]="usuario.email"
+          name="email"
+          required
+          type="email"
+          class="input-form"
+        />
+
+        <label>Telefone</label>
+        <input
+          [(ngModel)]="usuario.telefone"
+          name="telefone"
+          required
+          class="input-form"
+        />
+
+        <div style="margin-top: 20px">
+          <button type="submit" class="botao-salvar">Salvar</button>
+          <button type="button" (click)="cancelar()" class="botao-cancelar">
+            Cancelar
+          </button>
+        </div>
+      </form>
+
+      <!-- Formulário de alteração de senha -->
+      <form
+        *ngIf="editandoSenha"
+        (ngSubmit)="alterarSenha()"
+        style="margin-left: 20px; flex-grow: 1"
+      >
+        <h3>Alterar senha</h3>
+
+        <label>Senha atual</label>
+        <input
+          [(ngModel)]="senhaAtual"
+          name="senhaAtual"
+          required
+          type="password"
+          class="input-form"
+          minlength="6"
+          maxlength="20"
+          autocomplete="current-password"
+        />
+
+        <label>Nova senha</label>
+        <input
+          [(ngModel)]="novaSenha"
+          name="novaSenha"
+          required
+          type="password"
+          class="input-form"
+          minlength="6"
+          maxlength="20"
+          autocomplete="new-password"
+        />
+
+        <label>Confirmar nova senha</label>
+        <input
+          [(ngModel)]="confirmarNovaSenha"
+          name="confirmarNovaSenha"
+          required
+          type="password"
+          class="input-form"
+          minlength="6"
+          maxlength="20"
+          autocomplete="new-password"
+        />
+
+        <div style="margin-top: 20px">
+          <button type="submit" class="botao-salvar">Alterar Senha</button>
+          <button
+            type="button"
+            (click)="cancelarSenha()"
+            class="botao-cancelar"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Botões principais só aparecem se não estiver editando -->
+    <div *ngIf="!editando && !editandoSenha" style="margin-top: 20px">
+      <button (click)="editando = true" class="botao-editar">
+        Editar Dados
+      </button>
+      <button
+        (click)="editandoSenha = true"
+        class="botao-editar"
+        style="margin-left: 10px"
+      >
+        Alterar Senha
+      </button>
+    </div>
+  </div>
+</div>

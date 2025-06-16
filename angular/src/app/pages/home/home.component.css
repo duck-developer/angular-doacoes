@@ -1,0 +1,77 @@
+.campanhas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #102a18;
+}
+
+.card .descricao {
+  font-size: 14px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.card button {
+  background-color: #32a2aa;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.card button:hover {
+  background-color: #288f98;
+}
+
+.paginacao {
+  display: flex;
+  position: fixed;
+  bottom: 8%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 20px;
+  width: 100%;
+  color: white;
+}
+
+.paginacao button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #102a18;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.paginacao button:hover {
+  background-color: #1a3f2b;
+}
+
+.paginacao button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}

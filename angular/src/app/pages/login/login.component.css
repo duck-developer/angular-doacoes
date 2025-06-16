@@ -1,0 +1,86 @@
+/* Plano de fundo com imagem */
+.login-page {
+  background: url("/assets/background.png") no-repeat center center / cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-left: 4rem;
+  color: white;
+}
+
+/* Formulário alinhado à esquerda */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 300px;
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo img {
+  width: 40px;
+}
+
+.logo span {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: white;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+}
+
+/* Inputs estilo verde translúcido */
+input {
+  background-color: rgba(206, 255, 157, 0.85); /* Verde-claro translúcido */
+  border: none;
+  border-radius: 6px;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #000;
+  width: 400px;
+}
+
+input::placeholder {
+  color: #333;
+}
+
+/* Texto abaixo do campo */
+.subtext {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-top: -0.5rem;
+}
+
+/* Botão verde escuro */
+button {
+  background-color: #497b1b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+button:hover {
+  background-color: #3b6516;
+}
+
+/* Link "Esqueceu a senha?" */
+.forgot-password {
+  color: #333;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
